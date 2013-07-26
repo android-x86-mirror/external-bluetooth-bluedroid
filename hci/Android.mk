@@ -28,7 +28,7 @@ LOCAL_SRC_FILES += \
 LOCAL_C_INCLUDES += \
         $(LOCAL_PATH)/include \
         $(LOCAL_PATH)/../utils/include \
-        external/libusb
+        external/libusb_aah
 
 LOCAL_SHARED_LIBRARIES := \
         libcutils \
