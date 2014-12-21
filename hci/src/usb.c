@@ -780,6 +780,7 @@ out :
         libusb_release_interface(usb.handle, 0);
         libusb_close(usb.handle);
         libusb_exit(NULL);
+        usb.handle = NULL;
     }
     return FALSE;
 }
@@ -933,7 +934,7 @@ uint16_t  usb_read(uint16_t msg_id, uint8_t *p_buffer, uint16_t len)
                 {
                     if (frames->actual_length == 0)
                     {
-	                 /* Previous frame has been processed */
+                        /* Previous frame has been processed */
                         usb.iso_frame_ndx++;
                         p_iso_hdr->offset = usb.iso_frame_ndx * iso_pkt_size;
                     }
@@ -1054,6 +1055,11 @@ uint16_t usb_write(uint16_t msg_id, uint8_t *p_data, uint16_t len)
     CMD_HDR *cmd_hdr;
     static int xmit_count;
 
+    if (usb.handle == NULL)
+    {
+        USBERR( "usb_write: usb not opened");
+        return 0;
+    }
     if(!(xmit_transfer = libusb_alloc_transfer(0)))
     {
         USBERR( "libusb_alloc_tranfer() failed");
